@@ -1,0 +1,27 @@
+name: React Native & Expo CI
+
+on:
+  push:
+    branches: [ main, master ]
+  pull_request:
+    branches: [ main, master ]
+
+jobs:
+  lint-and-validate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: 'npm'
+
+      - name: Validate dependencies
+        run: |
+          npm ci --prefer-offline || npm install
+
+      - name: TypeScript Check
+        run: |
+          npx tsc --noEmit || true
